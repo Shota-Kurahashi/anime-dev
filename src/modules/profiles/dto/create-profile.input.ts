@@ -1,7 +1,10 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
+import { IsNotEmpty, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateProfileInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => String, { description: 'Example field (placeholder)' })
+  @IsNotEmpty()
+  @IsUUID()
+  userId: string;
 }

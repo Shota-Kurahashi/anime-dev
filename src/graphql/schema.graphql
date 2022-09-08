@@ -121,12 +121,10 @@ type Auth {
 }
 
 type Query {
-  users: [User!]!
-  user(id: Int!): User!
+  user(username: String!): User!
   posts: [Post!]!
   post(id: Int!): Post!
-  profiles: [Profile!]!
-  profile(id: Int!): Profile!
+  profile(userId: String!): Profile!
   comments: [Comment!]!
   comment(id: Int!): Comment!
 }
@@ -139,7 +137,6 @@ type Mutation {
   removePost(id: Int!): Post!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  removeProfile(id: Int!): Profile!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   removeComment(id: Int!): Comment!
@@ -166,12 +163,12 @@ input UpdatePostInput {
 
 input CreateProfileInput {
   """Example field (placeholder)"""
-  exampleField: Int!
+  userId: String!
 }
 
 input UpdateProfileInput {
   """Example field (placeholder)"""
-  exampleField: Int
+  userId: String
   id: Int!
 }
 

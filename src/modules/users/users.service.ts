@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -7,12 +7,54 @@ import { UpdateUserInput } from './dto/update-user.input';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all users`;
+  async findOne(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        profile: true,
+        posts: {
+          include: {
+            comments: true,
+            _count: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('Not User');
+    }
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOneByUsername(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+      include: {
+        profile: true,
+        posts: {
+          include: {
+            comments: true,
+            _count: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('Not User');
+    }
+    return user;
   }
 
   update(id: string, updateUserInput: UpdateUserInput) {
