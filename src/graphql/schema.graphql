@@ -121,7 +121,8 @@ type Auth {
 }
 
 type Query {
-  user(username: String!): User!
+  user(id: String!): User!
+  userByName(username: String!): User!
   posts: [Post!]!
   post(id: Int!): Post!
   profile(userId: String!): Profile!

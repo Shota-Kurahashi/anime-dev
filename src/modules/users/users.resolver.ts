@@ -13,7 +13,7 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
-  @Query(() => User, { name: 'user' })
+  @Query(() => User, { name: 'userByName' })
   findOneByUsername(
     @Args('username', { type: () => String }) username: string,
   ) {

@@ -43,6 +43,15 @@ export class AuthService {
 
     await this.updateRefreshToken(user.id, refreshToken);
 
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        loginStatus: true,
+      },
+    });
+
     return { accessToken, refreshToken };
   }
 
@@ -62,6 +71,7 @@ export class AuthService {
           id: data.id,
           email: data.email,
           hashedPassword: hashed,
+          loginStatus: true,
         },
       });
 
@@ -92,8 +102,10 @@ export class AuthService {
       },
       data: {
         hashedRefreshToken: null,
+        loginStatus: false,
       },
     });
+
     return { accessToken: null, refreshToken: null };
   }
 
