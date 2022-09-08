@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator nestgraphql {
+    //v15.1.1以上の場合は"prisma-nestjs-graphql"のみでokです
+    provider = "prisma-nestjs-graphql"
+    output = "../src/@generated/prisma-nestjs-graphql"
+}
+
+model User {
+  id          String @id @unique
+  email String @unique
+  hashedPassword String
+  hashedRefreshToken String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  username String @unique @default(uuid())
+  profile Profile?
+  posts Post[]
+  comments Comment[]
+  follow String[]
+  followed String[]
+  ipaddress Float?
+  loginStatus Boolean @default(false)
+  deleted Boolean @default(false)
+}
+
+model Profile {
+  id          String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  favorite String[]
+  twitterId String?
+  facebookId String?
+  youtubeId String?
+  instagramId String?
+  tiktokId String?
+  img String?
+}
+
+model Post {
+  id          String @id @default(uuid())
+  ipaddress Float?
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorRole Role @default(ANONYMOUS)
+  authorName String @default(uuid())
+  startTime   DateTime @default(now())
+  title       String @db.VarChar(50)
+  episode    Int?
+  category    Category @default(Unknown)
+  content     String?
+  participant String[]
+  comments Comment[]
+  like String[]
+  public Boolean @default(true)
+  url     String?
+  deleted Boolean @default(false)
+}
+
+model Comment {
+  id          String @id @default(uuid())
+  ipAddress Float?
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  authorName String @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String
+  authorRole Role @default(ANONYMOUS)
+  content     String @db.VarChar(255)
+  likes String[]
+  unLiked String[]
+  twitterId String?
+  facebookId String?
+  youtubeId String?
+  instagramId String?
+  tiktokId String?
+  spoiler Boolean @default(false)
+  spoilers String[]
+  deleted Boolean @default(false)
+}
+
+enum Role {
+  ANONYMOUS
+  AUTHENTICATED
+}
+
+enum Category {
+  Anime
+  Drama
+  DramaMovie
+  AnimeMovie
+  Manga
+  Doujinshi
+  TV
+  Music
+  Unknown
+}
