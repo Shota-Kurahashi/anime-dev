@@ -132,7 +132,8 @@ type Query {
 
 type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  follow(followUserInput: FollowUserInput!): User!
+  removeUser: User!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: Int!): Post!
@@ -148,7 +149,12 @@ type Mutation {
 }
 
 input UpdateUserInput {
-  id: String!
+  id: String
+  username: String
+}
+
+input FollowUserInput {
+  followingUserId: String!
 }
 
 input CreatePostInput {
