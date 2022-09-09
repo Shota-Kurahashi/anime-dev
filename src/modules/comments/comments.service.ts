@@ -1,26 +1,101 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateCommentInput } from './dto/create-comment.input';
-import { UpdateCommentInput } from './dto/update-comment.input';
 
 @Injectable()
 export class CommentsService {
+  constructor(private readonly prisma: PrismaService) {}
   create(createCommentInput: CreateCommentInput) {
-    return 'This action adds a new comment';
+    return this.prisma.comment.create({
+      data: {
+        ...createCommentInput,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  findAll(postId: string) {
+    return this.prisma.comment.findMany({
+      where: {
+        postId,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async like(userId: string, commentId: string) {
+    const comment = await this.prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+    if (comment.likes.includes(userId)) {
+      //*いいねを外す
+      const likes = await this.prisma.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          likes: {
+            set: comment.likes.filter((id) => id !== userId),
+          },
+        },
+      });
+      return likes;
+    } else {
+      //*いいねをつける
+      const likes = await this.prisma.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          likes: {
+            push: userId,
+          },
+        },
+      });
+      return likes;
+    }
   }
-
-  update(id: number, updateCommentInput: UpdateCommentInput) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async unLike(userId: string, commentId: string) {
+    const comment = await this.prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+    if (comment.unLiked.includes(userId)) {
+      //*いいねを外す
+      const unLiked = await this.prisma.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          unLiked: {
+            set: comment.unLiked.filter((id) => id !== userId),
+          },
+        },
+      });
+      return unLiked;
+    } else {
+      //*いいねをつける
+      const unLiked = await this.prisma.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          unLiked: {
+            push: userId,
+          },
+        },
+      });
+      return unLiked;
+    }
   }
 }

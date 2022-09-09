@@ -1,8 +1,7 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { CommentsService } from './comments.service';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
-import { UpdateCommentInput } from './dto/update-comment.input';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
@@ -16,27 +15,17 @@ export class CommentsResolver {
   }
 
   @Query(() => [Comment], { name: 'comments' })
-  findAll() {
-    return this.commentsService.findAll();
+  findAll(@Args('postId') postId: string) {
+    return this.commentsService.findAll(postId);
   }
 
-  @Query(() => Comment, { name: 'comment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.commentsService.findOne(id);
-  }
-
-  @Mutation(() => Comment)
-  updateComment(
-    @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
-  ) {
-    return this.commentsService.update(
-      updateCommentInput.id,
-      updateCommentInput,
-    );
+  @Mutation(() => Comment, { name: 'commentLike' })
+  like(@Args('userId') userId: string, @Args('commentId') commentId: string) {
+    return this.commentsService.like(userId, commentId);
   }
 
   @Mutation(() => Comment)
-  removeComment(@Args('id', { type: () => Int }) id: number) {
-    return this.commentsService.remove(id);
+  unLike(@Args('userId') userId: string, @Args('commentId') commentId: string) {
+    return this.commentsService.unLike(userId, commentId);
   }
 }

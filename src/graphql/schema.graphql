@@ -130,8 +130,7 @@ type Query {
   follower: [Post!]!
   like: [Post!]!
   profile(userId: String!): Profile!
-  comments: [Comment!]!
-  comment(id: Int!): Comment!
+  comments(postId: String!): [Comment!]!
 }
 
 type Mutation {
@@ -144,8 +143,8 @@ type Mutation {
   removePost(id: String!): Post!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  removeComment(id: Int!): Comment!
+  commentLike(userId: String!, commentId: String!): Comment!
+  unLike(userId: String!, commentId: String!): Comment!
   login(authInput: AuthInput!): Auth!
   sighUp(authInput: AuthInput!): Auth!
   logout: Auth!
@@ -191,14 +190,17 @@ input UpdateProfileInput {
 }
 
 input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  postId: String!
+  userId: String
+  ipAddress: Float
+  authorName: String
+  authorRole: Role
+  content: String!
+  twitterId: String
+  facebookId: String
+  youtubeId: String
+  instagramId: String
+  tiktokId: String
 }
 
 input AuthInput {
