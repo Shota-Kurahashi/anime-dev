@@ -1,8 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
-import { UpdatePostInput } from './dto/update-post.input';
+import { CurrentUser } from '../auth/decorator/user.decorator';
+import { User } from '../users/entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { AccessTokenGuard } from '../auth/guards/acessToken.guard';
+import { ParticipantInput } from './dto/participant.input';
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -19,17 +23,54 @@ export class PostsResolver {
   }
 
   @Query(() => Post, { name: 'post' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.postsService.findOne(id);
   }
 
-  @Mutation(() => Post)
-  updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
-    return this.postsService.update(updatePostInput.id, updatePostInput);
+  @Query(() => [Post], { name: 'popular' })
+  findPopular() {
+    return this.postsService.findPopular();
+  }
+
+  @Query(() => [Post], { name: 'userPosts' })
+  findUser(@Args('id', { type: () => String }) id: string) {
+    return this.postsService.findUser(id);
+  }
+
+  @Query(() => [Post], { name: 'follower' })
+  @UseGuards(AccessTokenGuard)
+  findFollowerAndSelf(@CurrentUser() user: User) {
+    return this.postsService.findFollowerAndSelf(user.id);
+  }
+  @Query(() => [Post], { name: 'like' })
+  @UseGuards(AccessTokenGuard)
+  findLike(@CurrentUser() user: User) {
+    return this.postsService.findLike(user.id);
+  }
+
+  @Mutation(() => Post, { name: 'participant' })
+  participant(@Args('participantInput') participantInput: ParticipantInput) {
+    return this.postsService.participants(
+      participantInput.userId,
+      participantInput.postId,
+    );
   }
 
   @Mutation(() => Post)
-  removePost(@Args('id', { type: () => Int }) id: number) {
-    return this.postsService.remove(id);
+  @UseGuards(AccessTokenGuard)
+  like(
+    @CurrentUser() user: User,
+    @Args('id', { type: () => String }) id: string,
+  ) {
+    return this.postsService.like(user.id, id);
+  }
+
+  @Mutation(() => Post)
+  @UseGuards(AccessTokenGuard)
+  removePost(
+    @CurrentUser() user: User,
+    @Args('id', { type: () => String }) id: string,
+  ) {
+    return this.postsService.remove(user.id, id);
   }
 }

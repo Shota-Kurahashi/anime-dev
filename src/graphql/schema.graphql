@@ -124,7 +124,11 @@ type Query {
   user(id: String!): User!
   userByName(username: String!): User!
   posts: [Post!]!
-  post(id: Int!): Post!
+  post(id: String!): Post!
+  popular: [Post!]!
+  userPosts(id: String!): [Post!]!
+  follower: [Post!]!
+  like: [Post!]!
   profile(userId: String!): Profile!
   comments: [Comment!]!
   comment(id: Int!): Comment!
@@ -135,8 +139,9 @@ type Mutation {
   follow(followUserInput: FollowUserInput!): User!
   removeUser: User!
   createPost(createPostInput: CreatePostInput!): Post!
-  updatePost(updatePostInput: UpdatePostInput!): Post!
-  removePost(id: Int!): Post!
+  participant(participantInput: ParticipantInput!): Post!
+  like(id: String!): Post!
+  removePost(id: String!): Post!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
@@ -157,14 +162,22 @@ input FollowUserInput {
 }
 
 input CreatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  userId: String
+  ipaddress: Float
+  authorRole: Role
+  authorName: String!
+  startTime: DateTime
+  title: String!
+  episode: Int
+  category: Category
+  content: String
+  public: Boolean
+  url: String
 }
 
-input UpdatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input ParticipantInput {
+  userId: String!
+  postId: String!
 }
 
 input UpdateProfileInput {

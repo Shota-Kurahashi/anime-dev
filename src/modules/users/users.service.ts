@@ -157,6 +157,7 @@ export class UsersService {
   }
 
   remove(id: string) {
+    //TODO いいねを外す
     return this.prisma.user.update({
       where: {
         id,
