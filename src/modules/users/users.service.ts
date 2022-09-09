@@ -16,6 +16,7 @@ export class UsersService {
       },
       include: {
         profile: true,
+        _count: true,
         posts: {
           include: {
             comments: true,
@@ -41,6 +42,7 @@ export class UsersService {
       },
       include: {
         profile: true,
+        _count: true,
         posts: {
           include: {
             comments: true,

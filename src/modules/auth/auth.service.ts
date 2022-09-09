@@ -6,7 +6,6 @@ import { supabase } from 'src/lib/supabase';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthInput } from './dto/auth.input';
 import { JwtService } from '@nestjs/jwt';
-import { ProfilesService } from '../profiles/profiles.service';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +13,6 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly profileService: ProfilesService,
   ) {}
   async login(authInput: AuthInput) {
     const user = await this.prisma.user.findUnique({
@@ -56,9 +54,11 @@ export class AuthService {
   }
 
   async sighUp(authInput: AuthInput) {
-    const hashed = await bcrypt.hash(authInput.password, 12);
+    const { email, password, ...profileInput } = authInput;
+    const hashed = await bcrypt.hash(password, 12);
     const { data, error } = await supabase.auth.api.createUser({
-      ...authInput,
+      email,
+      password,
     });
 
     if (error) {
@@ -69,9 +69,14 @@ export class AuthService {
       await this.prisma.user.create({
         data: {
           id: data.id,
-          email: data.email,
+          email,
           hashedPassword: hashed,
           loginStatus: true,
+          profile: {
+            create: {
+              ...profileInput,
+            },
+          },
         },
       });
 
@@ -81,8 +86,6 @@ export class AuthService {
       );
 
       await this.updateRefreshToken(data.id, refreshToken);
-
-      await this.profileService.create({ userId: data.id });
 
       return { accessToken, refreshToken };
     } catch (error) {

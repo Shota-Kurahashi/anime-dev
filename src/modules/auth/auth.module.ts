@@ -5,10 +5,9 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { JwtRtStrategy } from './strategy/jwtRefresh.strategy';
-import { ProfilesModule } from '../profiles/profiles.module';
 
 @Module({
   providers: [AuthResolver, AuthService, JwtStrategy, JwtRtStrategy],
-  imports: [PrismaModule, JwtModule.register({}), ProfilesModule],
+  imports: [PrismaModule, JwtModule.register({})],
 })
 export class AuthModule {}

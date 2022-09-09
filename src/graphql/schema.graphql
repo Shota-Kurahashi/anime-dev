@@ -137,7 +137,6 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: Int!): Post!
-  createProfile(createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
@@ -168,11 +167,6 @@ input UpdatePostInput {
   id: Int!
 }
 
-input CreateProfileInput {
-  """Example field (placeholder)"""
-  userId: String!
-}
-
 input UpdateProfileInput {
   """Example field (placeholder)"""
   userId: String
@@ -193,4 +187,10 @@ input UpdateCommentInput {
 input AuthInput {
   email: String!
   password: String!
+  twitterId: String
+  facebookId: String
+  tiktokId: String
+  instagramId: String
+  youtubeId: String
+  img: String
 }
