@@ -53,7 +53,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async sighUp(authInput: AuthInput) {
+  async sighUp(authInput: AuthInput, ipaddress: string) {
     const { email, password, ...profileInput } = authInput;
     const hashed = await bcrypt.hash(password, 12);
     const { data, error } = await supabase.auth.api.createUser({
@@ -72,6 +72,7 @@ export class AuthService {
           email,
           hashedPassword: hashed,
           loginStatus: true,
+          ipaddress,
           profile: {
             create: {
               ...profileInput,

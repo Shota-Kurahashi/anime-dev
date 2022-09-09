@@ -162,7 +162,6 @@ input FollowUserInput {
 
 input CreatePostInput {
   userId: String
-  ipaddress: Float
   authorRole: Role
   authorName: String!
   startTime: DateTime
@@ -192,7 +191,6 @@ input UpdateProfileInput {
 input CreateCommentInput {
   postId: String!
   userId: String
-  ipAddress: Float
   authorName: String
   authorRole: Role
   content: String!

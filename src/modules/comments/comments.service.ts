@@ -5,10 +5,11 @@ import { CreateCommentInput } from './dto/create-comment.input';
 @Injectable()
 export class CommentsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createCommentInput: CreateCommentInput) {
+  create(createCommentInput: CreateCommentInput, ipaddress: string) {
     return this.prisma.comment.create({
       data: {
         ...createCommentInput,
+        ipaddress,
       },
     });
   }

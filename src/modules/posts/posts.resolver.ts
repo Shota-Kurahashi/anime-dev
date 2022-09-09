@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
@@ -13,8 +13,11 @@ export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
 
   @Mutation(() => Post)
-  createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
-    return this.postsService.create(createPostInput);
+  createPost(
+    @Args('createPostInput') createPostInput: CreatePostInput,
+    @Context() context: any,
+  ) {
+    return this.postsService.create(createPostInput, context.req.ip);
   }
 
   @Query(() => [Post], { name: 'posts' })

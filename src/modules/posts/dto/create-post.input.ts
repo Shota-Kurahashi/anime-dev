@@ -9,11 +9,6 @@ export class CreatePostInput {
   @IsOptional()
   userId: string;
 
-  @Field(() => Float, { nullable: true })
-  @IsOptional()
-  // @IsNotEmpty()
-  ipaddress?: number;
-
   @Field(() => Role, { nullable: true })
   @IsOptional()
   authorRole?: keyof typeof Role;

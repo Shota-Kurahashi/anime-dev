@@ -5,10 +5,11 @@ import { CreatePostInput } from './dto/create-post.input';
 @Injectable()
 export class PostsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createPostInput: CreatePostInput) {
+  create(createPostInput: CreatePostInput, ipaddress: string) {
     return this.prisma.post.create({
       data: {
         ...createPostInput,
+        ipaddress,
       },
     });
   }

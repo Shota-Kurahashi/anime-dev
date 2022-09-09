@@ -45,7 +45,7 @@ export class AuthResolver {
     @Args('authInput') authInput: AuthInput,
     @Context() context: any,
   ) {
-    const jwt = await this.authService.sighUp(authInput);
+    const jwt = await this.authService.sighUp(authInput, context.req.ip);
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
       secure: false, //* true -> httpsのみになる

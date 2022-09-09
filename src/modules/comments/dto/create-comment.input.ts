@@ -14,11 +14,6 @@ export class CreateCommentInput {
   @IsUUID()
   userId?: string;
 
-  @Field(() => Float, { nullable: true })
-  @IsOptional()
-  // @IsNotEmpty()
-  ipAddress?: number;
-
   @Field(() => String, { nullable: true })
   @IsOptional()
   @IsString()
