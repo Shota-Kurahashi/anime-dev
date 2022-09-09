@@ -1,4 +1,4 @@
-import { InputType, Field, Float } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Role } from 'src/modules/posts/entities/role.enum';
 
