@@ -168,9 +168,13 @@ input UpdatePostInput {
 }
 
 input UpdateProfileInput {
-  """Example field (placeholder)"""
-  userId: String
-  id: Int!
+  twitterId: String
+  facebookId: String
+  tiktokId: String
+  instagramId: String
+  youtubeId: String
+  img: String
+  favorite: [String!]
 }
 
 input CreateCommentInput {

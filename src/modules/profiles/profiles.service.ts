@@ -20,7 +20,14 @@ export class ProfilesService {
     return profile;
   }
 
-  update(id: number, updateProfileInput: UpdateProfileInput) {
-    return `This action updates a #${id} profile`;
+  update(id: string, updateProfileInput: UpdateProfileInput) {
+    return this.prisma.profile.update({
+      where: {
+        userId: id,
+      },
+      data: {
+        ...updateProfileInput,
+      },
+    });
   }
 }
