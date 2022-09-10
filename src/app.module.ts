@@ -20,6 +20,10 @@ import { AuthModule } from './modules/auth/auth.module';
       playground: true,
       autoSchemaFile: './src/graphql/schema.graphql',
       context: ({ req, res }) => ({ req, res }),
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,

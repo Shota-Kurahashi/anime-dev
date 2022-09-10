@@ -25,14 +25,14 @@ export class AuthResolver {
     const jwt = await this.authService.login(authInput);
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
 
     context.res.cookie('refresh_token', jwt.refreshToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
@@ -50,14 +50,14 @@ export class AuthResolver {
     const jwt = await this.authService.sighUp(authInput, context.req.ip);
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
 
     context.res.cookie('refresh_token', jwt.refreshToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
@@ -71,14 +71,14 @@ export class AuthResolver {
   logout(@CurrentUser() user: User, @Context() context: any) {
     context.res.cookie('access_token', '', {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
 
     context.res.cookie('refresh_token', '', {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
@@ -94,14 +94,14 @@ export class AuthResolver {
     const jwt = await this.authService.refresh(user.id, user.refreshToken);
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
 
     context.res.cookie('refresh_token', jwt.refreshToken, {
       httpOnly: true,
-      secure: false, //* true -> httpsのみになる
+      secure: true, //* true -> httpsのみになる
       sameSite: 'none',
       path: '/',
     });
