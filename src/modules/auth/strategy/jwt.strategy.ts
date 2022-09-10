@@ -30,8 +30,18 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       where: {
         id: payload.userId,
       },
+      include: {
+        profile: true,
+        posts: {
+          take: 10,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
     });
     delete user.hashedPassword;
+    delete user.ipaddress;
     return user;
   }
 }

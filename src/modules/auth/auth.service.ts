@@ -110,7 +110,7 @@ export class AuthService {
       },
     });
 
-    return { accessToken: null, refreshToken: null };
+    return { message: 'Logout' };
   }
 
   async createToken(userId: string, email: string) {

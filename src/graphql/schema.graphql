@@ -115,14 +115,14 @@ type User {
 }
 
 type Auth {
-  accessToken: String
-  refreshToken: String
   message: String
+  csrfToken: String
 }
 
 type Query {
   user(id: String!): User!
   userByName(username: String!): User!
+  loginUser: User!
   posts: [Post!]!
   post(id: String!): Post!
   popular: [Post!]!
@@ -143,7 +143,7 @@ type Mutation {
   removePost(id: String!): Post!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   createComment(createCommentInput: CreateCommentInput!): Comment!
-  commentLike(userId: String!, commentId: String!): Comment!
+  likeComment(userId: String!, commentId: String!): Comment!
   unLike(userId: String!, commentId: String!): Comment!
   login(authInput: AuthInput!): Auth!
   sighUp(authInput: AuthInput!): Auth!

@@ -23,6 +23,12 @@ export class UsersResolver {
     return this.usersService.findOneByUsername(username);
   }
 
+  @Query(() => User, { name: 'loginUser' })
+  @UseGuards(AccessTokenGuard)
+  loginUser(@CurrentUser() user: User) {
+    return user;
+  }
+
   @Mutation(() => User)
   @UseGuards(AccessTokenGuard)
   updateUser(

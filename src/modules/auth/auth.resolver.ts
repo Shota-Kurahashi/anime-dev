@@ -11,6 +11,11 @@ import { User } from '../users/entities/user.entity';
 @Resolver(() => Auth)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
+  // @Query(() => Auth)
+  // getCsrfToken(@Context() context: any) {
+  //   console.log(context.req.csrfToken());
+  //   return { csrfToken: context.req.csrfToken() };
+  // }
 
   @Mutation(() => Auth)
   async login(
@@ -18,7 +23,6 @@ export class AuthResolver {
     @Context() context: any,
   ) {
     const jwt = await this.authService.login(authInput);
-    console.log(context.req.ip);
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
       secure: false, //* true -> httpsのみになる
@@ -34,8 +38,6 @@ export class AuthResolver {
     });
 
     return {
-      accessToken: jwt.accessToken,
-      refreshToken: jwt.refreshToken,
       message: 'OK',
     };
   }
@@ -60,8 +62,6 @@ export class AuthResolver {
       path: '/',
     });
     return {
-      accessToken: jwt.accessToken,
-      refreshToken: jwt.refreshToken,
       message: 'OK',
     };
   }
@@ -106,8 +106,6 @@ export class AuthResolver {
       path: '/',
     });
     return {
-      accessToken: jwt.accessToken,
-      refreshToken: jwt.refreshToken,
       message: 'OK',
     };
   }

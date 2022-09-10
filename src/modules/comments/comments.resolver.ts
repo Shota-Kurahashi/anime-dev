@@ -20,7 +20,7 @@ export class CommentsResolver {
     return this.commentsService.findAll(postId);
   }
 
-  @Mutation(() => Comment, { name: 'commentLike' })
+  @Mutation(() => Comment, { name: 'likeComment' })
   like(@Args('userId') userId: string, @Args('commentId') commentId: string) {
     return this.commentsService.like(userId, commentId);
   }
