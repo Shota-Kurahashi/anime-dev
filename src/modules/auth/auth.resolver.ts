@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Auth } from './entities/auth.entity';
 import { AuthInput } from './dto/auth.input';
@@ -11,7 +11,7 @@ import { User } from '../users/entities/user.entity';
 @Resolver(() => Auth)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
-  // @Query(() => Auth)
+  // @Query(() => Auth, { name: 'csrf' })
   // getCsrfToken(@Context() context: any) {
   //   console.log(context.req.csrfToken());
   //   return { csrfToken: context.req.csrfToken() };
@@ -22,7 +22,7 @@ export class AuthResolver {
     @Args('authInput') authInput: AuthInput,
     @Context() context: any,
   ) {
-    const jwt = await this.authService.login(authInput);
+    const { user, ...jwt } = await this.authService.login(authInput);
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
       secure: true, //* true -> httpsのみになる
@@ -39,6 +39,7 @@ export class AuthResolver {
 
     return {
       message: 'OK',
+      user,
     };
   }
 
@@ -47,7 +48,10 @@ export class AuthResolver {
     @Args('authInput') authInput: AuthInput,
     @Context() context: any,
   ) {
-    const jwt = await this.authService.sighUp(authInput, context.req.ip);
+    const { user, ...jwt } = await this.authService.sighUp(
+      authInput,
+      context.req.ip,
+    );
     context.res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
       secure: true, //* true -> httpsのみになる
@@ -63,6 +67,7 @@ export class AuthResolver {
     });
     return {
       message: 'OK',
+      user,
     };
   }
 

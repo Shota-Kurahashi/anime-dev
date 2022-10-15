@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { UsersModule } from './modules/users/users.module';
 import { PostsModule } from './modules/posts/posts.module';
-
 import { ProfilesModule } from './modules/profiles/profiles.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { ConfigModule } from '@nestjs/config';

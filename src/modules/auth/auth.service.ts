@@ -19,6 +19,9 @@ export class AuthService {
       where: {
         email: authInput.email,
       },
+      include: {
+        profile: true,
+      },
     });
 
     if (!user) {
@@ -50,7 +53,7 @@ export class AuthService {
       },
     });
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, user };
   }
 
   async sighUp(authInput: AuthInput, ipaddress: string) {
@@ -66,7 +69,7 @@ export class AuthService {
     }
 
     try {
-      await this.prisma.user.create({
+      const user = await this.prisma.user.create({
         data: {
           id: data.id,
           email,
@@ -88,7 +91,7 @@ export class AuthService {
 
       await this.updateRefreshToken(data.id, refreshToken);
 
-      return { accessToken, refreshToken };
+      return { accessToken, refreshToken, user };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
